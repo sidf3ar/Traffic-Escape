@@ -9,4 +9,4 @@ Python, Django Framework, SQL
 Google Maps API
 
 
-#Credit to Ameer Sir and Mayank for all the help.
+#Credits to Ameer Sir for all the help.
