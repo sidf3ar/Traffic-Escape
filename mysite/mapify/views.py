@@ -186,7 +186,7 @@ def populate_data(lat_post, lng_post):
         path.calculate_traffic_score()
 
 
-def time_in_traffic_fromlatlng(s_lat, s_lng, e_lat, e_lng):
+def time_in_traffic_fromlatlng(s_lat, s_lng, e_lat, e_lng):  #realtime time computation
     API_URL = 'https://maps.googleapis.com/maps/api/directions/' \
               'json?origin=' + str(s_lat) + ',' + str(s_lng) + \
               '&destination=' + str(e_lat) + ',' + str(e_lng) + \
