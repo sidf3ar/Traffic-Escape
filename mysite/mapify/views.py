@@ -1,4 +1,5 @@
-from math import sin, cos
+#Traffice escape View controller
+from math import sin, cos #To compute the coordinates
 from django.http import HttpResponse
 import random
 import requests
@@ -24,13 +25,14 @@ def request_dynamic(request):
         latitude = float(json_data["latitude"])
         longitude = float(json_data["longitude"])
         ROADS_API_URL = "https://roads.googleapis.com/v1/nearestRoads?points="
-        for i in range(51):
-            radians = 3.14 * 0.02 * i
-            x_latitude = float(latitude) + latitude_CONSTANT * cos(radians)
+        for i in range(51): #Can manipulate the range to operate in a wide area.Computing coordinates below inside the loop. 
+            radians = 3.14 * 0.02 * i 
+            x_latitude = float(latitude) + latitude_CONSTANT * cos(radians) 
             y_longitude = float(longitude) + longitude_CONSTANT * sin(radians)
             ROADS_API_URL += str(x_latitude) + ',' + str(y_longitude) + '|'
         ROADS_API_URL = ROADS_API_URL[:(len(ROADS_API_URL) - 1)]
-        ROADS_API_URL += '&key=AIzaSyCOhrN9Tbo_a1sxm9Kcy2zxb4C7b51XB1k'
+        ROADS_API_URL += '&key=AIzaSyCOhrN9Tbo_a1sxm9Kcy2zxb4C7b51XB1k' #Need to generate a new API key every once in a while.
+	#So that the existing key does not get disbanded due to overuse.
         print(ROADS_API_URL)
         r = requests.get(ROADS_API_URL)
         json_response_data = json.loads(r.text)
@@ -46,24 +48,24 @@ def request_dynamic(request):
         print(w)
         traffic_places_list = []
         for member in w:
-            if member["total_avg_speed"] <= 20.0:
+            if member["total_avg_speed"] <= 15.0: #Speed can be manipulated to increase or reduce the speed as per maneuverability.
                 traffic_places_list.append(member)
         print(traffic_places_list)
         print(type(traffic_places_list))
         for place in traffic_places_list:
-            c = getplace_name_from_id(place["place_id"])
-            if(c is None):
+            c = getplace_name_from_id(place["place_id"]) 
+            if(c is None): #If C place does exist in the DB, the road and the way sprites are not gonna get appended.
                 pass
             else:
-                a["roads"].append(c)
+                a["roads"].append(c) #Appending road sprites to the existing area.
 
-        return json.dumps(a)
+        return json.dumps(a) # dumps the existing area from the memory as and when we move on the route and append roads.
 
 
 def getplace_name_from_id(placeid):
     r = requests.get("https://maps.googleapis.com/maps/api/place/details/json?"
                      "placeid=" + placeid +
-                     "&key=AIzaSyB5OBkGEowp58z-e8NoCmWeHlV2osjZgqc")
+                     "&key=AIzaSyB5OBkGEowp58z-e8NoCmWeHlV2osjZgqc") #Place Fetch request
     print(r.text)
     json_place_data = json.loads(r.text)
     if json_place_data["status"] == "NOT_FOUND":
