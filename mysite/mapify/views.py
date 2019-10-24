@@ -1,4 +1,4 @@
-#Traffice escape View controller
+#Trafficescape View controller
 from math import sin, cos #To compute the coordinates
 from django.http import HttpResponse
 import random
